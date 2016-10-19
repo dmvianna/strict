@@ -1,0 +1,6 @@
+*
+!*.hs
+!*.lhs
+!**/
+.stack-work
+!.gitignore

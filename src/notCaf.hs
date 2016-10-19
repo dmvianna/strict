@@ -1,0 +1,17 @@
+
+module Main where
+
+-- not a CAF
+
+incdInts :: [Integer] -> [Integer]
+incdInts x = map (+1) x
+
+main :: IO ()
+main = do
+  print (incdInts [1..] !! 1000)
+  print (incdInts [1..] !! 900000)
+  print (incdInts [1..] !! 900000)
+  print (incdInts [1..] !! 9009000)
+  print (incdInts [1..] !! 9009000)
+  print (incdInts [1..] !! 9009000)
+
