@@ -19,6 +19,7 @@ executable strict
   build-depends:       base
                      , containers
                      , criterion
-                     , primitive
-                     , vector
                      , mersenne-random-pure64
+                     , primitive
+                     , text >= 1.2.2.1
+                     , vector
