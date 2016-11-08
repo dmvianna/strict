@@ -59,15 +59,10 @@ q'' = toQueue l'
 s' :: S.Seq Int
 s' = S.fromList l'
 
-again :: Int -> (a -> a) -> a -> a
-again n f = foldr (.) id (replicate n f)
-
 main :: IO ()
 main = defaultMain
   [ bench "turning queue" $
-    whnf (again 1 turnQ) q''
+    whnf turnQ q''
   , bench "turning sequence" $
-    whnf (again 1 turnS) s'
+    whnf turnS s'
   ]
-
--- again 4 (snd . fromMaybe (0, Queue [] []) . pop) q''
