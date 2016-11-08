@@ -12,17 +12,22 @@ data Queue a =
         } deriving (Eq, Show)
 
 toQueue :: [a] -> Queue a
-toQueue xs = Queue xs (reverse xs)
+toQueue xs' =
+  case splitAt (length xs' - 1) xs' of
+    ([],[]) -> Queue [] []
+    ([x],[])   -> Queue [] [x]
+    (x,y) -> Queue x y
 
 push :: a -> Queue a -> Queue a
 push x q = let xs = x : enqueue q
-           in toQueue xs
+           in Queue xs (dequeue q)
 
 pop :: Queue a -> Maybe (a, Queue a)
 pop q =
   case dequeue q of
     [] -> Nothing
-    x:xs -> Just (x, toQueue xs)
+    [x] -> Just (x, toQueue $ enqueue q)
+    _ -> pop $ toQueue (enqueue q ++ dequeue q) -- should not happen
 
 -- Do stuff
 
@@ -30,8 +35,9 @@ turnQ :: Queue a -> Queue a
 turnQ q' =
   case dequeue q' of
     [] -> toQueue []
-    _  -> let (x, q) = fromJust $ pop q -- living la vida loca
-          in push x q
+    _  -> do
+      let (x, q) = fromJust $ pop q -- living la vida loca
+      push x q
 
 turnS :: S.Seq a -> S.Seq a
 turnS s =
@@ -63,3 +69,5 @@ main = defaultMain
   , bench "turning sequence" $
     whnf (again 1 turnS) s'
   ]
+
+-- again 4 (snd . fromMaybe (0, Queue [] []) . pop) q''
